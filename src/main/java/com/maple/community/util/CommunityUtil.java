@@ -1,0 +1,53 @@
+package com.maple.community.util;
+
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.DigestUtils;
+
+import javax.print.attribute.standard.JobOriginatingUserName;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+public class CommunityUtil {
+    // 生成随机字符串
+    public static String generateUUID(){
+        return UUID.randomUUID().toString().replaceAll("-","");
+    }
+
+    // md5加密
+    public static String md5(String key){
+        if (StringUtils.isBlank(key)){
+            return null;
+        }
+        return DigestUtils.md5DigestAsHex(key.getBytes());
+    }
+
+    public static String getJSONString(int code, String msg, Map<String,Object> map){
+        JSONObject json = new JSONObject();
+        json.put("code",code);
+        json.put("msg",msg);
+        if(map != null){
+            for(String key : map.keySet())
+                json.put(key,map.get(key));
+        }
+        /*
+        if(map!=null){
+            json.put("object",map);
+        }*/
+        return json.toJSONString();
+    }
+    public static String getJSONString(int code,String msg){
+        return getJSONString(code,msg,null);
+    }
+    public static String getJSONString(int code){
+        return getJSONString(code,null,null);
+    }
+
+    public static void main(String[] args) {
+        String salt = "1e758";
+        String password = md5(salt+"mufeng");
+        System.out.println(password);
+    }
+
+}
